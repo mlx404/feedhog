@@ -1,0 +1,11 @@
+services:
+  feedhog:
+    build: .
+    ports:
+      - "127.0.0.1:52987:8000" # Meant to be used with a reverse proxy
+    volumes:
+      - ./feeds.yml:/app/feeds.yml:ro
+      - ./prompt.txt:/app/prompt.txt:ro
+      - ./config.yaml:/app/config.yaml:ro
+    env_file:
+      - ./.env

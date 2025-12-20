@@ -1,0 +1,32 @@
+refresh_interval_hours: 3
+summary_items_per_category: 5
+language: English
+model: gemini/gemini-flash-latest
+
+categories:
+  - name: News
+    feeds:
+      - url: https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml
+        source: New York Times
+      - url: https://rss.slashdot.org/Slashdot/slashdotMain
+        source: Slashdot
+
+  - name: Technology
+    feeds:
+      - url: https://hnrss.org/best
+        source: Hacker News Best
+        extras:
+          - comments
+      - url: https://xkcd.com/atom.xml
+        source: xkcd
+        summarize: false
+        days: 14
+
+  - name: Science
+    feeds:
+      - url: https://www.newscientist.com/feed/home/
+        source: New Scientist
+        days: 7
+      - url: https://www.technologyreview.com/feed/
+        source: MIT Technology Review
+        days: 7

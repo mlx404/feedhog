@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedhog</title>
+    <link rel="stylesheet" href="/static/feedhog.css">
+</head>
+<body>
+    <div class="kbd-help">
+        <button class="kbd-help-btn" id="kbdHelpBtn" title="Keyboard shortcuts">?</button>
+        <div class="kbd-help-popup" id="kbdHelpPopup">
+            <table>
+                <tr><td><kbd>j</kbd> / <kbd>k</kbd></td><td>next / prev section</td></tr>
+                <tr><td><kbd>g</kbd> / <kbd>G</kbd></td><td>first / last section</td></tr>
+                <tr><td><kbd>n</kbd> / <kbd>N</kbd></td><td>next / prev category</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <header>
+        <div class="banner">
+            <h1><a href="/">🐷 feedhog</a></h1>
+            <p class="tagline">all your feeds, devoured.</p>
+        </div>
+    </header>
+
+    <main>
+        {% if summaries %}
+        <div class="summary-section">
+            <h1>tl;dr</h1>
+            <p class="generated-at" data-timestamp="{{ summaries.generated_at.isoformat() }}"></p>
+            <div class="brutal-grid">
+                {% for category, bullets in summaries.categories.items() %}
+                <div class="category-section">
+                    <h2 class="feed-category-header">{{ category }}</h2>
+                    <ul>
+                        {% for bullet in bullets %}
+                        <li>
+                            <strong>{{ bullet.title }}:</strong> {{ bullet.text }}
+                            {% if bullet.references %}
+                            <span class="references">
+                                {% for ref in bullet.references %}<a href="{{ ref.url }}" title="{{ ref.source }}: {{ ref.title }}" target="_blank" class="ref-badge" data-source="{{ ref.source }}"></a>{% endfor %}
+                            </span>
+                            {% endif %}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <h1>Feeds</h1>
+        {% if feeds %}
+        <p class="generated-at" data-timestamp="{{ feeds.generated_at.isoformat() }}"></p>
+        {% for category, sources in feeds.articles_by_category().items() %}
+        <h2 class="feed-category-header">{{ category }}</h2>
+        <div class="brutal-grid">
+            {% for source, source_articles in sources.items() %}
+            <div class="category-section">
+                <h3>{{ source }}</h3>
+                <ul>
+                    {% if not source_articles %}
+                    <li class="no-articles">No new articles in the configured time frame.</li>
+                    {% else %}
+                    {% for article in source_articles %}
+                    <li>
+                        <a href="{{ article.url }}" class="article-link" target="_blank">{% if article.author %}{{ article.author }} - {% endif %}{{ article.title }}</a>
+                        <span class="age-indicator" data-timestamp="{{ article.published_timestamp }}"></span>
+                        {% if article.comments %}<a href="{{ article.comments }}" target="_blank" class="comments-link">[c]</a>{% endif %}
+                    </li>
+                    {% endfor %}
+                    {% endif %}
+                </ul>
+            </div>
+            {% endfor %}
+        </div>
+        {% endfor %}
+        {% else %}
+        <p class="generated-at">Loading...</p>
+        {% endif %}
+    </main>
+
+    <script src="/static/feedhog.js"></script>
+</body>
+</html>

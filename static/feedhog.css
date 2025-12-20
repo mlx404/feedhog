@@ -1,0 +1,243 @@
+/**
+ * feedhog.css — styles for the Feedhog feed reader.
+ *
+ * Sections:
+ *  1. Base / reset
+ *  2. Layout & header
+ *  3. Feed grid
+ *  4. Article metadata  (age indicator, source name, comments link)
+ *  5. Reference badges  (.ref-badge, .ref-more)
+ *  6. Keyboard-focus highlight
+ *  7. Keyboard-shortcut help popup
+ *  8. Responsive — narrow viewports
+ *  9. Dark-mode overrides
+ */
+
+/* ---------------------------------------------------------------------------
+   1. Base / reset
+--------------------------------------------------------------------------- */
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif,
+                 "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    margin: 0;
+    padding: 1em;
+}
+
+a { text-decoration: none; }
+
+/* Banner and source links stay black so they don't compete with content links. */
+.banner a { color: black; }
+a[href*="/source/"] { color: black; }
+
+/* ---------------------------------------------------------------------------
+   2. Layout & header
+--------------------------------------------------------------------------- */
+
+header { margin-bottom: 2em; }
+header h1 { margin: 0 0 0.1em 0; }
+
+.tagline {
+    color: #999;
+    font-size: 0.85em;
+    margin: 0 0 0.5em 0;
+    letter-spacing: 0.03em;
+}
+
+main h1 { font-size: 1.7em; }
+li { padding-bottom: 0.5rem; }
+
+/* ---------------------------------------------------------------------------
+   3. Feed grid
+   Three equal columns on wide screens; collapses to a single column on mobile.
+--------------------------------------------------------------------------- */
+
+.brutal-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2em;
+}
+
+.feed-category-header {
+    font-size: 0.75em;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #fff;
+    background: rgba(220, 60, 100, 0.8);
+    margin: 2em 0 0.8em 0;
+    padding: 0.3em 0.7em;
+    display: inline-block;
+    border-radius: 3px;
+}
+
+.category-section h3 { font-size: 1.1em; font-weight: bold; margin-bottom: 0.5em; }
+.category-section ul { list-style: disc; padding-left: 1.5em; margin: 0 0 1em 0; }
+
+/* ---------------------------------------------------------------------------
+   4. Article metadata
+--------------------------------------------------------------------------- */
+
+.age-indicator,
+.source-name    { color: #666; }
+
+.comments-link  { color: #666; margin-left: 0.3em; text-decoration: none; }
+
+/* Sits just below the section heading. */
+.generated-at   { color: #999; font-size: 0.9em; margin: -0.5em 0 1em 0; }
+
+.no-articles    { color: #999; font-style: italic; list-style: none; }
+
+/* ---------------------------------------------------------------------------
+   5. Reference badges
+   .ref-badge  — clickable pill linking to a source article
+   .ref-more   — "+N" toggle that reveals hidden overflow badges
+--------------------------------------------------------------------------- */
+
+.ref-badge {
+    display: inline-block;
+    font-size: 0.7em;
+    padding: 1px 5px;
+    border-radius: 3px;
+    background: rgba(220, 60, 100, 0.07);
+    color: #c0335a;
+    margin-left: 3px;
+    border: 1px solid rgba(220, 60, 100, 0.2);
+    text-decoration: none !important;
+    white-space: nowrap;
+    font-weight: 600;
+    vertical-align: middle;
+    letter-spacing: 0.02em;
+}
+.ref-badge:visited { color: #c0335a; }
+.ref-badge:hover   { background: rgba(220, 60, 100, 0.16); }
+
+.ref-more {
+    display: inline-block;
+    font-size: 0.7em;
+    padding: 1px 5px;
+    border-radius: 3px;
+    color: #999;
+    margin-left: 3px;
+    border: 1px solid rgba(128, 128, 128, 0.3);
+    cursor: pointer;
+    white-space: nowrap;
+    vertical-align: middle;
+    user-select: none;
+}
+.ref-more:hover { color: #555; }
+
+/* ---------------------------------------------------------------------------
+   6. Keyboard-focus highlight
+   Applied by JS when the user navigates sections with j/k/g/G.
+--------------------------------------------------------------------------- */
+
+.category-section.block-focused {
+    outline: 2px solid rgba(220, 60, 100, 0.45);
+    border-radius: 4px;
+}
+
+/* ---------------------------------------------------------------------------
+   7. Keyboard-shortcut help popup
+--------------------------------------------------------------------------- */
+
+.kbd-help {
+    position: fixed;
+    top: 1em;
+    right: 1em;
+    z-index: 100;
+}
+
+/* Small circular "?" button. */
+.kbd-help-btn {
+    width: 1.5em;
+    height: 1.5em;
+    border-radius: 50%;
+    border: 1px solid #ccc;
+    background: none;
+    color: #999;
+    font-size: 0.75em;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    line-height: 1;
+}
+.kbd-help-btn:hover { color: #555; border-color: #aaa; }
+
+/* Dropdown panel listing all shortcuts. */
+.kbd-help-popup {
+    display: none;
+    position: absolute;
+    top: calc(100% + 0.5em);
+    right: 0;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 0.6em 0.8em;
+    white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    font-size: 0.78em;
+    color: #444;
+}
+.kbd-help-popup.visible { display: block; }
+.kbd-help-popup table   { border-collapse: collapse; }
+.kbd-help-popup td      { padding: 0.15em 0.4em 0.15em 0; }
+.kbd-help-popup td:first-child { padding-right: 0.7em; }
+
+/* Inline key glyphs used inside the shortcut table. */
+kbd {
+    font-family: inherit;
+    background: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 1px 5px;
+    font-size: 0.9em;
+}
+
+/* ---------------------------------------------------------------------------
+   8. Responsive — narrow viewports
+--------------------------------------------------------------------------- */
+
+@media (max-width: 800px) {
+    .brutal-grid { grid-template-columns: 1fr; }
+}
+
+/* ---------------------------------------------------------------------------
+   9. Dark-mode overrides
+--------------------------------------------------------------------------- */
+
+@media (prefers-color-scheme: dark) {
+    body          { background-color: #000; color: #e8e6e3; }
+    a:link        { color: #3391ff; }
+    a:visited     { color: #ba55d3; }
+
+    .banner a,
+    a[href*="/source/"] { color: white; }
+
+    .feed-category-header { background: rgba(255, 100, 140, 0.75); color: #fff; }
+
+    .age-indicator,
+    .source-name,
+    .generated-at,
+    .comments-link,
+    .no-articles  { color: #999; }
+
+    /* Reference badges shift to a pink/rose palette in dark mode. */
+    .ref-badge          { background: rgba(255, 100, 140, 0.1); color: #ff6b8a; border-color: rgba(255, 100, 140, 0.25); }
+    .ref-badge:visited  { color: #ff6b8a; }
+    .ref-badge:hover    { background: rgba(255, 100, 140, 0.22); }
+
+    .ref-more           { color: #777; }
+    .ref-more:hover     { color: #bbb; }
+
+    .category-section.block-focused { outline-color: rgba(255, 107, 138, 0.5); }
+
+    .kbd-help-btn       { border-color: #444; color: #666; }
+    .kbd-help-btn:hover { color: #aaa; border-color: #666; }
+
+    .kbd-help-popup     { background: #111; border-color: #333; color: #ccc; box-shadow: 0 2px 8px rgba(0,0,0,0.4); }
+
+    kbd                 { background: #222; border-color: #444; color: #ccc; }
+}
